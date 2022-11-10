@@ -64,7 +64,7 @@ const userController = {
     removeUser({ params }, res) {
         Thought.deleteMany({ userId: params.id })
           .then(()=>{
-            User.findOneAndDelete({ userID: params.id })
+            User.findOneAndDelete({ _id: params.id })
                 .then(dbUserData => {
                     if (!dbUserData) {
                         res.status(404).json({message: "No user found with that id!"});
@@ -79,8 +79,8 @@ const userController = {
     // addFriend,
     addFriend( { params }, res) {
         User.findOneAndUpdate(
-            {_id: params.userID},
-            {$push: { friends: params.friendId } },
+            { _id: params.userId },
+            { $push: { friends: params.friendId } },
             { new: true }
         )
         .then((dbUserData) => {
@@ -96,7 +96,7 @@ const userController = {
     // removeFriend
     removeFriend({params},res) {
         User.findOneAndUpdate(
-            {_id: params.userID},
+            {_id: params.userId},
             {$pull: { friends: params.friendId}},
             {new: true}
         )
